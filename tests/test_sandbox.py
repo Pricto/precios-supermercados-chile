@@ -60,3 +60,20 @@ def test_money_and_delta():
     text.LANG = "en"
     assert text.money(1090) == "CLP 1,090"
     assert text.delta(1000, 965) == ("▼ 3.5%", "baja")
+
+
+def test_monitor_many_skus_with_batch_and_csv(client, tmp_path):
+    from price_tracker.report import changes, render as render_report, to_csv
+    from price_tracker.tracker import update_all
+
+    store = Store(str(tmp_path / "prices.db"))
+    products = client.products(category="food.dairy")
+    for p in products:
+        track(client, store, p["id"], history_days=8)
+    assert update_all(client, store) == len(products)
+    rows = changes(store, days=7)
+    assert {r["product_id"] for r in rows} == {p["id"] for p in products}
+    assert all(r["previous_price"] for r in rows)
+    assert to_csv(rows).splitlines()[0] == "product_id,name,retailer,day,price,previous_day,previous_price,change_pct"
+    html = render_report(store, rows)
+    assert html.count("<tr>") == len(products) + 1

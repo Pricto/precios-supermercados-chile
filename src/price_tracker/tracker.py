@@ -32,13 +32,31 @@ def track(client: Client, store: Store, product: str, history_days: int = 0) -> 
                 continue
             rows += [(s["offer_id"], offer["retailer"]["name"], p["t"], p["price"], offer["url"])
                      for p in s["points"] if p["price"] is not None]
-    rows += [(p["offer_id"], p["retailer"]["name"], p["observed_local_date"], p["price"], p["url"])
-             for p in data["prices"]]
-
     store.add_product(data["product"])
-    store.save_prices(product_id, rows)
-    meta = response["meta"]
-    store.set_meta("attribution", meta["attribution"]["text"])
-    store.set_meta("currency", data["prices"][0]["currency"] if data["prices"] else "CLP")
-    store.set_meta("sample_data", str(any(w.startswith("synthetic_data") for w in meta.get("warnings", []))))
+    store.save_prices(product_id, rows + _today(data["prices"]))
+    _save_meta(store, response["meta"], data["prices"])
     return data
+
+
+def update_all(client: Client, store: Store) -> int:
+    """El precio de hoy de todos los productos seguidos, de a 500 por llamada (/prices/batch)."""
+    ids = [p["id"] for p in store.products()]
+    for start in range(0, len(ids), 500):
+        response = client.batch(ids[start:start + 500])
+        for item in response["data"]:
+            if item["found"]:
+                store.save_prices(item["product_id"], _today(item["prices"]))
+        _save_meta(store, response["meta"], [p for item in response["data"] for p in item.get("prices", [])])
+    return len(ids)
+
+
+def _today(prices: list[dict]) -> list[tuple]:
+    return [(p["offer_id"], p["retailer"]["name"], p["observed_local_date"], p["price"], p["url"]) for p in prices]
+
+
+def _save_meta(store: Store, meta: dict, prices: list[dict]) -> None:
+    # La atribución de la API, sin el id del recurso: la página muestra varios productos.
+    attribution = meta["attribution"]
+    store.set_meta("attribution", attribution["text"].removesuffix(f" · {attribution.get('resource_id')}"))
+    store.set_meta("currency", prices[0]["currency"] if prices else "CLP")
+    store.set_meta("sample_data", str(any(w.startswith("synthetic_data") for w in meta.get("warnings", []))))

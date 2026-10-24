@@ -27,10 +27,18 @@ class Client:
         self.lang = lang
 
     def get(self, path: str, **params) -> dict:
+        return self.request(path, params)
+
+    def post(self, path: str, body: dict) -> dict:
+        return self.request(path, {}, body)
+
+    def request(self, path: str, params: dict, body: dict | None = None) -> dict:
         params = {k: v for k, v in params.items() if v is not None} | {"lang": self.lang}
         request = urllib.request.Request(
             f"{self.base}{path}?{urllib.parse.urlencode(params)}",
-            headers={"Authorization": f"Bearer {self.key}", "User-Agent": "price-tracker-example/0.1"},
+            data=json.dumps(body).encode() if body is not None else None,
+            headers={"Authorization": f"Bearer {self.key}", "Content-Type": "application/json",
+                     "User-Agent": "price-tracker-example/0.1"},
         )
         for attempt in range(4):
             try:
@@ -49,6 +57,20 @@ class Client:
 
     def search(self, query: str, limit: int = 5) -> list[dict]:
         return self.get("/products/search", q=query, limit=limit)["data"]
+
+    def products(self, brand: str | None = None, category: str | None = None) -> list[dict]:
+        """Todos los productos de una marca o categoría, página por página."""
+        out, cursor = [], None
+        while True:
+            page = self.get("/products", brand=brand, category=category, limit=50, cursor=cursor)
+            out += page["data"]
+            cursor = page["pagination"]["next_cursor"]
+            if not cursor:
+                return out
+
+    def batch(self, product_ids: list[str]) -> dict:
+        """Precio de hoy de hasta 500 productos en una sola llamada."""
+        return self.post("/prices/batch", {"items": [{"product_id": i} for i in product_ids]})
 
     def prices(self, product_id: str) -> dict:
         return self.get(f"/products/{product_id}/prices")

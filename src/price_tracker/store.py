@@ -6,7 +6,7 @@ SCHEMA = """
 create table if not exists products (id text primary key, name text not null, size text);
 create table if not exists prices (
   product_id text not null, offer_id text not null, retailer text not null,
-  day text not null, price real not null, url text,
+  day text not null, price numeric not null, url text,
   primary key (offer_id, day)
 );
 create table if not exists meta (key text primary key, value text);

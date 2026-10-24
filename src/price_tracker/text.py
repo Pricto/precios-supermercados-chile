@@ -21,6 +21,15 @@ MESSAGES = {
     "title": ("Historial de precios", "Price history"),
     "since": ("desde", "since"),
     "latest": ("Último precio", "Latest price"),
+    "monitor": ("Monitor de precios", "Price monitor"),
+    "products": ("productos", "products"),
+    "changes": ("cambios", "changes"),
+    "drops": ("bajas", "drops"),
+    "rises": ("subas", "rises"),
+    "product": ("Producto", "Product"),
+    "report_saved": ("Monitor guardado en", "Monitor saved to"),
+    "added_many": ("Siguiendo", "Tracking"),
+    "export": ("Exportar CSV", "Export CSV"),
 }
 
 

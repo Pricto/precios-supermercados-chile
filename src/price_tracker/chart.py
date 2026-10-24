@@ -71,10 +71,15 @@ def render(store: Store) -> str:
         _card(p["name"], p["size"], series, currency)
         for p in store.products() if (series := store.series(p["id"]))
     ]
+    return page(store, t("title"), "".join(cards) or f"<p>{t('empty')}</p>")
+
+
+def page(store: Store, title: str, body: str, width: int = 760) -> str:
+    """La página con el sistema visual de la marca, la nota de la sandbox y la línea de fuente."""
     sample = f'<p class="note">{t("sample")}</p>' if store.meta("sample_data") == "True" else ""
     return f"""<!doctype html>
 <html lang="{text.LANG}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{t("title")}</title>
+<title>{escape(title)}</title>
 <style>
 @font-face {{ font-family: 'Host Grotesk'; font-weight: 300 800; src: {_font("host-grotesk-latin.woff2")}; }}
 @font-face {{ font-family: 'Geist Mono'; font-weight: 100 900; src: {_font("geist-mono-latin.woff2")}; }}
@@ -83,7 +88,7 @@ def render(store: Store) -> str:
   --accent-soft: #ffeee8; --accent-ink: #b0401f; --warn: #8a4b00; --warn-soft: #fdf1dc; }}
 * {{ box-sizing: border-box; margin: 0; font-style: normal; font-synthesis: none; }}
 body {{ font: 15px/1.5 'Host Grotesk', system-ui, sans-serif; color: var(--text); background: var(--bg2); padding: 40px 20px; }}
-main {{ max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }}
+main {{ max-width: {width}px; margin: 0 auto; display: grid; gap: 28px; }}
 h1 {{ font-size: 32px; letter-spacing: -0.03em; color: var(--ink); }}
 h2 {{ font-size: 18px; letter-spacing: -0.01em; color: var(--ink); }}
 .card {{ background: #fff; border: 1px solid var(--line2); border-radius: 3px; padding: 18px 20px;
@@ -104,6 +109,6 @@ td .sw {{ display: inline-block; width: 10px; height: 10px; border-radius: 2px; 
 .note {{ font: 12.5px 'Geist Mono', monospace; color: var(--warn); background: var(--warn-soft); padding: 8px 12px; border-radius: 6px; }}
 footer {{ font: 12px 'Geist Mono', monospace; color: var(--dim); border-top: 1px dashed var(--line2); padding-top: 8px; }}
 </style></head>
-<body><main><h1>{t("title")}</h1>{sample}{"".join(cards) or f"<p>{t('empty')}</p>"}
+<body><main><h1>{escape(title)}</h1>{sample}{body}
 <footer>{escape(store.meta("attribution") or "")}</footer></main></body></html>
 """
