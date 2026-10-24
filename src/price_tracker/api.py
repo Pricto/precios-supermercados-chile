@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 
 SANDBOX_KEY = "sk_test_sandbox"
-DEFAULT_URL = "https://mercali-platform.vercel.app"
+DEFAULT_URL = "https://pricto.dev"
 
 
 class ApiError(Exception):

@@ -11,7 +11,7 @@ Track a list of products sold by Chilean retailers with the [Pricto](https://pri
 No account needed: without `PRICTO_API_KEY` the tracker uses the public sandbox (`sk_test_sandbox`), which answers with sample data.
 
 ```bash
-uvx --from git+https://github.com/MarceloFarrMintii/price-tracker price-tracker --lang en add "whole milk"
+uvx --from git+https://github.com/Pricto/price-tracker price-tracker --lang en add "whole milk"
 ```
 
 ```text
@@ -25,7 +25,7 @@ Other matches (add by id):
   prd_03lonc  Loncoleche lactose-free semi-skimmed milk 1 L
 ```
 
-With `pip`: `pip install git+https://github.com/MarceloFarrMintii/price-tracker`, then `price-tracker ...`.
+With `pip`: `pip install git+https://github.com/Pricto/price-tracker`, then `price-tracker ...`.
 
 ## Commands
 
@@ -54,7 +54,7 @@ price-tracker report --vs 7 --csv monitor.csv
 
 ![Monitor of 17 products at three supermarkets with their 7-day changes and CSV export](docs/monitor-en.png)
 
-Products that changed come first, biggest drop on top. The CSV has one row per product and store: `product_id, name, retailer, day, price, previous_day, previous_price, change_pct`. To get a notification instead of opening the table, see [price-alerts-bot](https://github.com/MarceloFarrMintii/price-alerts-bot) (ntfy or webhook).
+Products that changed come first, biggest drop on top. The CSV has one row per product and store: `product_id, name, retailer, day, price, previous_day, previous_price, change_pct`. To get a notification instead of opening the table, see [price-alerts-bot](https://github.com/Pricto/price-alerts-bot) (ntfy or webhook).
 
 ## Every day
 
@@ -75,7 +75,7 @@ price-tracker add 7802920000017
 | Variable | What for | Default |
 |---|---|---|
 | `PRICTO_API_KEY` | Your API key | `sk_test_sandbox` (sample data) |
-| `PRICTO_API_URL` | Another API instance | `https://mercali-platform.vercel.app` |
+| `PRICTO_API_URL` | Another API instance | `https://pricto.dev` |
 
 What it costs (measured against the demo API, 2026-10-24): adding a product sold at 4 stores with 30 days of history is 9 credits (1 for the search, 4 for prices and 4 for history); each `update` charges 1 credit per store, and repeating the same query within 24 hours is free. Every response reports the charge in `meta.credits_charged`.
 
@@ -95,7 +95,7 @@ About 500 lines, a third of them HTML and CSS, in [`src/price_tracker/`](src/pri
 They run against the public sandbox:
 
 ```bash
-git clone https://github.com/MarceloFarrMintii/price-tracker && cd price-tracker
+git clone https://github.com/Pricto/price-tracker && cd price-tracker
 uv run pytest
 ```
 

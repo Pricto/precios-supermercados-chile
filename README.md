@@ -11,7 +11,7 @@ Sigue una lista de productos del retail chileno con la API de [Pricto](https://p
 No necesitas cuenta: sin `PRICTO_API_KEY`, el tracker usa la sandbox pública (`sk_test_sandbox`), que responde con datos de ejemplo.
 
 ```bash
-uvx --from git+https://github.com/MarceloFarrMintii/price-tracker price-tracker add "leche entera"
+uvx --from git+https://github.com/Pricto/price-tracker price-tracker add "leche entera"
 ```
 
 ```text
@@ -25,7 +25,7 @@ Otros resultados (agrega por id):
   prd_03lonc  Leche semidescremada sin lactosa Loncoleche 1 L
 ```
 
-Con `pip`: `pip install git+https://github.com/MarceloFarrMintii/price-tracker` y después `price-tracker ...`.
+Con `pip`: `pip install git+https://github.com/Pricto/price-tracker` y después `price-tracker ...`.
 
 ## Comandos
 
@@ -54,7 +54,7 @@ price-tracker report --vs 7 --csv monitor.csv
 
 ![Monitor con 17 productos en tres supermercados, sus cambios en 7 días y exportación a CSV](docs/monitor-es.png)
 
-Primero van los productos que cambiaron, la baja más grande arriba. El CSV trae una fila por producto y tienda: `product_id, name, retailer, day, price, previous_day, previous_price, change_pct`. Para recibir un aviso en vez de abrir la tabla, mira [price-alerts-bot](https://github.com/MarceloFarrMintii/price-alerts-bot) (ntfy o webhook).
+Primero van los productos que cambiaron, la baja más grande arriba. El CSV trae una fila por producto y tienda: `product_id, name, retailer, day, price, previous_day, previous_price, change_pct`. Para recibir un aviso en vez de abrir la tabla, mira [price-alerts-bot](https://github.com/Pricto/price-alerts-bot) (ntfy o webhook).
 
 ## Todos los días
 
@@ -75,7 +75,7 @@ price-tracker add 7802920000017
 | Variable | Para qué | Por omisión |
 |---|---|---|
 | `PRICTO_API_KEY` | Tu API key | `sk_test_sandbox` (datos de ejemplo) |
-| `PRICTO_API_URL` | Otra instancia de la API | `https://mercali-platform.vercel.app` |
+| `PRICTO_API_URL` | Otra instancia de la API | `https://pricto.dev` |
 
 Cuánto cuesta (medido contra la API de demo, 24-10-2026): agregar un producto vendido en 4 tiendas con 30 días de historial son 9 créditos (1 de búsqueda, 4 de precios y 4 de historial); cada `update` cobra 1 crédito por tienda y repetir la misma consulta dentro de 24 horas es gratis. Cada respuesta informa lo cobrado en `meta.credits_charged`.
 
@@ -95,7 +95,7 @@ El campo `price` es lo que paga cualquier persona. Los precios con tarjeta de la
 Corren contra la sandbox pública:
 
 ```bash
-git clone https://github.com/MarceloFarrMintii/price-tracker && cd price-tracker
+git clone https://github.com/Pricto/price-tracker && cd price-tracker
 uv run pytest
 ```
 
