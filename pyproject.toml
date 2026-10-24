@@ -1,0 +1,18 @@
+[project]
+name = "price-tracker"
+version = "0.1.0"
+description = "Track retail prices by store and chart their history, using a retail price data API."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+price-tracker = "price_tracker.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
