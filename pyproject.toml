@@ -1,7 +1,7 @@
 [project]
 name = "price-tracker"
 version = "0.1.0"
-description = "Track retail prices by store and chart their history, using a retail price data API."
+description = "Track retail prices by store and chart their history, using the Pricto API."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"

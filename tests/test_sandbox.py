@@ -1,4 +1,4 @@
-"""Corre contra la sandbox pública (sk_test_sandbox). PRICES_API_URL apunta a otra instancia."""
+"""Corre contra la sandbox pública (sk_test_sandbox). PRICTO_API_URL apunta a otra instancia."""
 
 import pytest
 

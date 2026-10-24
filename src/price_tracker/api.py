@@ -1,4 +1,4 @@
-"""Cliente mínimo de la API REST de precios, solo con la biblioteca estándar."""
+"""Cliente mínimo de la API REST de Pricto, solo con la biblioteca estándar."""
 
 import json
 import os
@@ -22,8 +22,8 @@ class ApiError(Exception):
 
 class Client:
     def __init__(self, key: str | None = None, url: str | None = None, lang: str = "es"):
-        self.key = key or os.environ.get("PRICES_API_KEY") or SANDBOX_KEY
-        self.base = (url or os.environ.get("PRICES_API_URL") or DEFAULT_URL).rstrip("/") + "/v1"
+        self.key = key or os.environ.get("PRICTO_API_KEY") or SANDBOX_KEY
+        self.base = (url or os.environ.get("PRICTO_API_URL") or DEFAULT_URL).rstrip("/") + "/v1"
         self.lang = lang
 
     def get(self, path: str, **params) -> dict:

@@ -2,13 +2,13 @@
 
 English · [Español](README.md)
 
-Track a list of products sold by Chilean retailers, keep their price history per store in a SQLite file and chart it. With many SKUs (a whole brand or category) it builds a monitor of price changes and exports it to CSV. Python 3.10+, no dependencies.
+Track a list of products sold by Chilean retailers with the [Pricto](https://pricto.dev) API, keep their price history per store in a SQLite file and chart it. With many SKUs (a whole brand or category) it builds a monitor of price changes and exports it to CSV. Python 3.10+, no dependencies.
 
 ![Price history chart of two products at several stores](docs/chart-en.png)
 
 ## Try it in a minute
 
-No account needed: without `PRICES_API_KEY` the tracker uses the public sandbox (`sk_test_sandbox`), which answers with sample data.
+No account needed: without `PRICTO_API_KEY` the tracker uses the public sandbox (`sk_test_sandbox`), which answers with sample data.
 
 ```bash
 uvx --from git+https://github.com/MarceloFarrMintii/price-tracker price-tracker --lang en add "whole milk"
@@ -68,14 +68,14 @@ To build your own history, schedule `update` once a day (prices are captured dai
 ## With your key
 
 ```bash
-export PRICES_API_KEY=sk_live_...
+export PRICTO_API_KEY=sk_live_...
 price-tracker add 7802920000017
 ```
 
 | Variable | What for | Default |
 |---|---|---|
-| `PRICES_API_KEY` | Your API key | `sk_test_sandbox` (sample data) |
-| `PRICES_API_URL` | Another API instance | `https://mercali-platform.vercel.app` |
+| `PRICTO_API_KEY` | Your API key | `sk_test_sandbox` (sample data) |
+| `PRICTO_API_URL` | Another API instance | `https://mercali-platform.vercel.app` |
 
 What it costs (measured against the demo API, 2026-10-24): adding a product sold at 4 stores with 30 days of history is 9 credits (1 for the search, 4 for prices and 4 for history); each `update` charges 1 credit per store, and repeating the same query within 24 hours is free. Every response reports the charge in `meta.credits_charged`.
 
@@ -99,7 +99,7 @@ git clone https://github.com/MarceloFarrMintii/price-tracker && cd price-tracker
 uv run pytest
 ```
 
-`PRICES_API_URL=http://localhost:8787 uv run pytest` runs them against a local instance.
+`PRICTO_API_URL=http://localhost:8787 uv run pytest` runs them against a local instance.
 
 ## License
 
