@@ -25,7 +25,10 @@ def track(client: Client, store: Store, product: str, history_days: int = 0) -> 
 
     rows = []
     if history_days:
-        since = (date.today() - timedelta(days=history_days)).isoformat()
+        # La ventana se cuenta desde el último día con datos, no desde hoy: así no depende de la
+        # hora ni de cuánto se atrase la captura (la sandbox, por ejemplo, termina en una fecha fija).
+        latest = max((date.fromisoformat(p["observed_local_date"]) for p in data["prices"]), default=date.today())
+        since = (latest - timedelta(days=history_days)).isoformat()
         for s in client.history(product_id, since)["data"]["series"]:
             offer = offers.get(s["offer_id"])
             if offer is None:  # el historial también trae packs y otros formatos: solo el mismo artículo

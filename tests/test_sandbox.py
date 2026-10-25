@@ -1,8 +1,10 @@
 """Corre contra la sandbox pública (sk_test_sandbox). PRICTO_API_URL apunta a otra instancia."""
 
+from datetime import date
+
 import pytest
 
-from price_tracker import text
+from price_tracker import text, tracker
 from price_tracker.api import ApiError, Client
 from price_tracker.chart import render
 from price_tracker.cli import main
@@ -62,7 +64,21 @@ def test_money_and_delta():
     assert text.delta(1000, 965) == ("▼ 3.5%", "baja")
 
 
-def test_monitor_many_skus_with_batch_and_csv(client, tmp_path):
+@pytest.fixture(params=[None, "2026-10-25", "2027-03-01"], ids=["hoy", "dia-siguiente", "meses-despues"])
+def any_today(request, monkeypatch):
+    """Corre el test con la fecha real y con fechas simuladas posteriores a los datos de la sandbox."""
+    if request.param:
+        fixed = date.fromisoformat(request.param)
+
+        class FakeDate(date):
+            @classmethod
+            def today(cls):
+                return fixed
+
+        monkeypatch.setattr(tracker, "date", FakeDate)
+
+
+def test_monitor_many_skus_with_batch_and_csv(client, tmp_path, any_today):
     from price_tracker.report import changes, render as render_report, to_csv
     from price_tracker.tracker import update_all
 
