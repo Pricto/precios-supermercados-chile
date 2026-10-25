@@ -1,11 +1,17 @@
 [project]
 name = "price-tracker"
 version = "0.1.0"
-description = "Track retail prices by store and chart their history, using the Pricto API."
+description = "Seguimiento de precios de supermercados y farmacias de Chile (Jumbo, Unimarc, Santa Isabel, Cruz Verde) con la API de Pricto: historial, gráfico y monitor de competencia."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
+keywords = ["precios", "supermercados", "chile", "api", "price-tracker", "jumbo", "unimarc", "santa-isabel", "cruz-verde", "pricto", "mcp"]
 dependencies = []
+
+[project.urls]
+Homepage = "https://pricto.dev"
+Documentation = "https://pricto.dev/docs"
+Repository = "https://github.com/Pricto/precios-supermercados-chile"
 
 [project.scripts]
 price-tracker = "price_tracker.cli:main"
